@@ -1,8 +1,6 @@
 
 
 // Create a list that holds all of your cards
-/*
-
 const cardDeck = ['fa-diamond', 'fa-diamond',
                'fa-paper-plane', 'fa-paper-plane',
                'fa-anchor', 'fa-anchor',
@@ -12,22 +10,11 @@ const cardDeck = ['fa-diamond', 'fa-diamond',
                'fa-bicycle', 'fa-bicycle',
                'fa-bomb', 'fa-bomb'
              ];
-*/
+
 
 let openCards = [];
 let moveCounter = 0;
-let matchCounter = 1;
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
-
-
-
+let matchCounter = 0;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -42,6 +29,45 @@ function shuffle(array) {
     }
 
     return array;
+}
+
+/*
+ * Display the cards on the page
+ *   - shuffle the list of cards using the provided "shuffle" method below
+ *   - loop through each card and create its HTML
+ *   - add each card's HTML to the page
+ */
+
+// Create a card
+function createCard(card) {
+    return "<i class='fa " + card + "'></i>";
+}
+
+// Initialize the game board
+function initializeGame() {
+    // shuffle(cardDeck);
+    const deck = document.createElement('ul')
+    for (const card of cardDeck) {
+        const newCard = document.createElement('li')
+        newCard.classList.add('card');
+        newCard.innerHTML = createCard(card);
+        deck.appendChild(newCard);
+    }
+    deck.classList.add('deck');
+    document.getElementsByClassName('container')[0].appendChild(deck);
+}
+
+initializeGame();
+
+// increment the move counter and display it on the page
+function incrementMoveCounter() {
+    moveCounter++;
+    // update move counter on page, display it on the page
+}
+
+// Increment the match counter
+function incrementMatchCounter() {
+    matchCounter++;
 }
 
 // Diplay the card's symbol
@@ -70,6 +96,7 @@ function matchCards() {
     openCards[1].classList.add('match');
     openCards[1].classList.remove('open', 'show');
     openCards = [];
+    incrementMatchCounter();
 }
 
 // cards do not match
@@ -81,21 +108,9 @@ function hideCards() {
     }, 1500);
 }
 
-// increment the move counter and display it on the page
-function incrementMoveCounter() {
-    moveCounter++;
-    // update move counter on page, display it on the page
-}
-
-// Increment the match counter
-function incrementMatchCounter() {
-    matchCounter++;
-}
-
 // All cards have matched - display a message with the final score}
 function endGame(){
     console.log('game over')
-    console.log('matchCounter')
 }
 
 const cards = document.getElementsByClassName('card');
@@ -116,7 +131,6 @@ for (const card of cards) {
             }
 
             incrementMoveCounter();
-            incrementMatchCounter();
 
             if(matchCounter == 8){
                 endGame();
@@ -124,3 +138,14 @@ for (const card of cards) {
         }
     });
 }
+
+// EventListener for restart
+const restart = document.getElementsByClassName('restart');
+restart[0].addEventListener('click', function() {
+    for (const card of cards) {
+        card.classList.remove('open', 'show', 'match');
+    }
+    openCards = [];
+    moveCounter = 0;
+    matchCounter = 0;
+});
