@@ -13,6 +13,8 @@ const movesElement = document.querySelector('.moves');
 let openCards = [];
 let moveCounter = 0;
 let matchCounter = 0;
+let firstMove = true;
+let startTime, endTime;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -108,7 +110,15 @@ function hideCards() {
 
 // All cards have matched - display a message with the final score}
 function endGame(){
-    console.log('game over')
+    endTime = new Date();
+    let timeDiff = Math.abs(endTime - startTime) / 1000;
+    let hours = Math.floor(timeDiff / 3600) % 24;
+    let minutes = Math.floor(timeDiff / 60) % 60;
+    let seconds = timeDiff % 60;
+    console.log('game over');
+    console.log('hours: ' + hours);
+    console.log('minutes: ' + minutes);
+    console.log('seconds: ' + seconds);
 }
 
 // Restart the game
@@ -120,6 +130,9 @@ function restartGame() {
     moveCounter = 0;
     matchCounter = 0;
     movesElement.textContent = 0;
+    firstMove = true;
+    startTime = 0;
+    endTime = 0;
 }
 
 // Flip the card and check match
@@ -149,6 +162,10 @@ function clickResponse(event) {
 
     if (event.target.matches('.card')) { // If a card is clicked
         if(!event.target.classList.contains('match')){ // Ignore cards that are already matched
+            if(firstMove == true) {
+                firstMove = false;
+                startTime = new Date();
+            }
             flipCard();
         }
     }
