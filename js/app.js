@@ -1,6 +1,3 @@
-
-
-// Create a list that holds all of your cards
 const cardDeck = ['fa-diamond', 'fa-diamond',
                'fa-paper-plane', 'fa-paper-plane',
                'fa-anchor', 'fa-anchor',
@@ -11,7 +8,8 @@ const cardDeck = ['fa-diamond', 'fa-diamond',
                'fa-bomb', 'fa-bomb'
              ];
 
-
+const cards = document.getElementsByClassName('card');
+const movesElement = document.querySelector('.moves');
 let openCards = [];
 let moveCounter = 0;
 let matchCounter = 0;
@@ -62,7 +60,7 @@ initializeGame();
 // increment the move counter and display it on the page
 function incrementMoveCounter() {
     moveCounter++;
-    // update move counter on page, display it on the page
+    movesElement.textContent = moveCounter;
 }
 
 // Increment the match counter
@@ -113,39 +111,51 @@ function endGame(){
     console.log('game over')
 }
 
-const cards = document.getElementsByClassName('card');
-
-// EventListener for cards
-for (const card of cards) {
-    card.addEventListener('click', function() {
-        if(!card.classList.contains('match')){ // Ignore cards that are already matched
-            showCard(card);
-            addToOpenCards(card);
-
-            if(openCards.length == 2){ // If two cards have been selected
-                if(checkMatch()){
-                    matchCards();
-                } else {
-                    hideCards();
-                }
-            }
-
-            incrementMoveCounter();
-
-            if(matchCounter == 8){
-                endGame();
-            }
-        }
-    });
-}
-
-// EventListener for restart
-const restart = document.getElementsByClassName('restart');
-restart[0].addEventListener('click', function() {
+// Restart the game
+function restartGame() {
     for (const card of cards) {
         card.classList.remove('open', 'show', 'match');
     }
     openCards = [];
     moveCounter = 0;
     matchCounter = 0;
-});
+    movesElement.textContent = 0;
+}
+
+// Flip the card and check match
+function flipCard() {
+    showCard(event.target);
+    addToOpenCards(event.target);
+
+    if(openCards.length == 2){ // If two cards have been selected
+        if(checkMatch()){
+            matchCards();
+        } else {
+            hideCards();
+        }
+    }
+
+    incrementMoveCounter();
+
+    if(matchCounter == 8){
+        endGame();
+    }
+}
+
+// Eventlistner for mouse clicks
+function clickResponse(event) {
+
+    console.log(event.target);
+
+    if (event.target.matches('.card')) { // If a card is clicked
+        if(!event.target.classList.contains('match')){ // Ignore cards that are already matched
+            flipCard();
+        }
+    }
+
+    if (event.target.matches('.fa-repeat')) { // If restart button is clicked
+        restartGame();
+    }
+}
+
+document.addEventListener('click', clickResponse);
