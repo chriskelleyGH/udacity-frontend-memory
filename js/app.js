@@ -52,9 +52,25 @@ function initializeGame() {
     }
     deck.classList.add('deck');
     document.getElementsByClassName('container')[0].appendChild(deck);
+
+    openCards = [];
+    moveCounter = 0;
+    matchCounter = 0;
+    movesElement.textContent = 0;
+    firstMove = true;
+    startTime = 0;
+    endTime = 0;
+    starRating = 3;
 }
 
 initializeGame();
+
+// Clear the game board
+function clearBoard() {
+    let deck = document.querySelector('.deck');
+    deck.remove();
+}
+
 
 // Show the game over modal
 function gameOverModal() {
@@ -153,20 +169,10 @@ function endGame(){
 
 // Restart the game
 function restartGame() {
-    for (const card of cards) {
-        card.classList.remove('open', 'show', 'match');
-    }
-    openCards = [];
-    moveCounter = 0;
-    matchCounter = 0;
-    movesElement.textContent = 0;
-    firstMove = true;
-    startTime = 0;
-    endTime = 0;
-    starRating = 3;
+    clearBoard();
+    initializeGame();
     stars[2].style.visibility = 'visible';
     stars[1].style.visibility = 'visible';
-    shuffle(cardDeck);
 }
 
 // Flip the card and check match
