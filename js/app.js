@@ -10,6 +10,10 @@ const cardDeck = ['fa-diamond', 'fa-diamond',
 
 const cards = document.getElementsByClassName('card');
 const movesElement = document.querySelector('.moves');
+const modal = document.querySelector(".modal");
+const modalClose = document.querySelector(".modal-close")
+let stars = document.querySelectorAll(".stars li");
+let starRating = 3;
 let openCards = [];
 let moveCounter = 0;
 let matchCounter = 0;
@@ -43,6 +47,18 @@ function createCard(card) {
     return "<i class='fa " + card + "'></i>";
 }
 
+/*
+// Reset stars
+function resetStars(){
+    let stars = document.querySelector('.stars');
+    stars.remove();
+
+    let scorePanel = document.querySelector('.score-panel');
+    let starsString = "<ul class='stars'> <li><i class='fa fa-star'></i></li><li><i class='fa fa-star'></i></li><li><i class='fa fa-star'></i></li></ul>"
+    scorePanel.innerHTML = starsString;
+}
+*/
+
 // Initialize the game board
 function initializeGame() {
     // shuffle(cardDeck);
@@ -59,10 +75,47 @@ function initializeGame() {
 
 initializeGame();
 
-// increment the move counter and display it on the page
+// Show the game over modal
+function gameOverModal() {
+    let timeDiff = Math.abs(endTime - startTime) / 1000;
+    let hours = Math.floor(timeDiff / 3600) % 24;
+    let minutes = Math.floor(timeDiff / 60) % 60;
+    let seconds = timeDiff % 60;
+    let time = document.getElementById("time");
+    let rating = document.getElementById("rating");
+
+    if(minutes == 0){
+        time.textContent = "You completed the game in " + seconds.toFixed(0) + " seconds.";
+    } else if (minutes == 1) {
+        time.textContent = "You completed the game in " + minutes + " minute and " + seconds.toFixed(0) + " seconds.";
+    } else {
+        time.textContent = "You completed the game in " + minutes + " minutes and " + seconds.toFixed(0) + " seconds.";
+    }
+
+    if (starRating > 1) {
+        rating.textContent = "Your star rating is " + starRating + " stars."
+    } else {
+        rating.textContent = "Your star rating is " + starRating + " star."
+    }
+
+    modal.classList.toggle("show-modal");
+}
+
+
+// Increment the move counter and display it on the page
 function incrementMoveCounter() {
     moveCounter++;
     movesElement.textContent = moveCounter;
+
+    if (moveCounter == 2) { // change back to 19
+        stars[2].classList.add('hide');
+        starRating--;
+    }
+
+    if (moveCounter == 5) { // change back to 27
+        stars[1].classList.add('hide');
+        starRating--;
+    }
 }
 
 // Increment the match counter
@@ -111,14 +164,7 @@ function hideCards() {
 // All cards have matched - display a message with the final score}
 function endGame(){
     endTime = new Date();
-    let timeDiff = Math.abs(endTime - startTime) / 1000;
-    let hours = Math.floor(timeDiff / 3600) % 24;
-    let minutes = Math.floor(timeDiff / 60) % 60;
-    let seconds = timeDiff % 60;
-    console.log('game over');
-    console.log('hours: ' + hours);
-    console.log('minutes: ' + minutes);
-    console.log('seconds: ' + seconds);
+    gameOverModal();
 }
 
 // Restart the game
@@ -133,6 +179,8 @@ function restartGame() {
     firstMove = true;
     startTime = 0;
     endTime = 0;
+    starRating = 3;
+    // resetStars();
 }
 
 // Flip the card and check match
@@ -171,6 +219,11 @@ function clickResponse(event) {
     }
 
     if (event.target.matches('.fa-repeat')) { // If restart button is clicked
+        restartGame();
+    }
+
+    if(event.target.matches('.modal-close')) { // If the modal is closed
+        modal.classList.toggle("show-modal");
         restartGame();
     }
 }
