@@ -35,33 +35,14 @@ function shuffle(array) {
     return array;
 }
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
 // Create a card
 function createCard(card) {
     return "<i class='fa " + card + "'></i>";
 }
 
-/*
-// Reset stars
-function resetStars(){
-    let stars = document.querySelector('.stars');
-    stars.remove();
-
-    let scorePanel = document.querySelector('.score-panel');
-    let starsString = "<ul class='stars'> <li><i class='fa fa-star'></i></li><li><i class='fa fa-star'></i></li><li><i class='fa fa-star'></i></li></ul>"
-    scorePanel.innerHTML = starsString;
-}
-*/
-
 // Initialize the game board
 function initializeGame() {
-    // shuffle(cardDeck);
+    shuffle(cardDeck);
     const deck = document.createElement('ul')
     for (const card of cardDeck) {
         const newCard = document.createElement('li')
@@ -101,21 +82,24 @@ function gameOverModal() {
     modal.classList.toggle("show-modal");
 }
 
+// Check and update star rating
+function updateStars(){
+    if (moveCounter == 19) {
+        stars[2].style.visibility = 'hidden';
+        starRating--;
+    }
+
+    if (moveCounter == 27) {
+        stars[1].style.visibility = 'hidden';
+        starRating--;
+    }
+}
 
 // Increment the move counter and display it on the page
 function incrementMoveCounter() {
     moveCounter++;
     movesElement.textContent = moveCounter;
-
-    if (moveCounter == 2) { // change back to 19
-        stars[2].classList.add('hide');
-        starRating--;
-    }
-
-    if (moveCounter == 5) { // change back to 27
-        stars[1].classList.add('hide');
-        starRating--;
-    }
+    updateStars();
 }
 
 // Increment the match counter
@@ -142,7 +126,7 @@ function checkMatch() {
     }
 }
 
-// cards match
+// Set the cards to matched
 function matchCards() {
     openCards[0].classList.add('match');
     openCards[0].classList.remove('open', 'show');
@@ -152,7 +136,7 @@ function matchCards() {
     incrementMatchCounter();
 }
 
-// cards do not match
+// Flip the cards that do not match
 function hideCards() {
     setTimeout(function() {
       openCards[0].classList.remove('open', 'show');
@@ -161,7 +145,7 @@ function hideCards() {
     }, 1500);
 }
 
-// All cards have matched - display a message with the final score}
+// All of the cards have matched - end the game
 function endGame(){
     endTime = new Date();
     gameOverModal();
@@ -180,7 +164,9 @@ function restartGame() {
     startTime = 0;
     endTime = 0;
     starRating = 3;
-    // resetStars();
+    stars[2].style.visibility = 'visible';
+    stars[1].style.visibility = 'visible';
+    shuffle(cardDeck);
 }
 
 // Flip the card and check match

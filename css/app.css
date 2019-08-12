@@ -98,14 +98,10 @@ h1 {
     margin: 0 5px 0 0;
 }
 
-.score-panel .stars li {
+.score-panel .stars li{
+    visibility: visible;
     list-style: none;
     display: inline-block;
-    visibility: visible;
-}
-
-.score-panel .stars.hide li {
-    visibility: hidden;
 }
 
 .score-panel .restart {
