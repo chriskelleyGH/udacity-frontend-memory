@@ -1,12 +1,12 @@
 const cardDeck = ['fa-diamond', 'fa-diamond',
-               'fa-paper-plane', 'fa-paper-plane',
-               'fa-anchor', 'fa-anchor',
-               'fa-bolt', 'fa-bolt',
-               'fa-cube', 'fa-cube',
-               'fa-leaf', 'fa-leaf',
-               'fa-bicycle', 'fa-bicycle',
-               'fa-bomb', 'fa-bomb'
-             ];
+    'fa-paper-plane', 'fa-paper-plane',
+    'fa-anchor', 'fa-anchor',
+    'fa-bolt', 'fa-bolt',
+    'fa-cube', 'fa-cube',
+    'fa-leaf', 'fa-leaf',
+    'fa-bicycle', 'fa-bicycle',
+    'fa-bomb', 'fa-bomb'
+];
 
 const cards = document.getElementsByClassName('card');
 const movesElement = document.querySelector('.moves');
