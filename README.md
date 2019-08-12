@@ -1,20 +1,17 @@
 # Memory Game Project
 
-## Table of Contents
+## How to Play
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
+Flip over two hidden cards at a time to locate the ones that match.
 
-## Instructions
+Try to find all of the matches on the board with as little moves as possible.
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+A three star rating means you completed the game in less than 19 moves.
 
-To get started, open `js/app.js` and start building out the app's functionality
+A two star rating means you completed the game in less than 27 moves.
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+A one star rating means you completed the game.
 
-## Contributing
+## Notes
 
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+This project utilized starter project code provided by Udacity at [https://github.com/udacity/fend-project-memory-game](https://github.com/udacity/fend-project-memory-game).  The starter project code consisted of HTML and CSS styling to display a static version of the Memory Game project along with a javascript shuffle function.
