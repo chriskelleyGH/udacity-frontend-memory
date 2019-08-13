@@ -201,7 +201,7 @@ function clickResponse(event) {
     console.log(event.target);
 
     if (event.target.matches('.card')) { // If a card is clicked
-        if(!event.target.classList.contains('match')){ // Ignore cards that are already matched
+        if(!event.target.classList.contains('match') || !event.target.classList.contains('open')){ // Ignore cards that are already matched or flipped.
             if(firstMove == true) {
                 firstMove = false;
                 startTime = new Date();
