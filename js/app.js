@@ -18,7 +18,8 @@ let openCards = [];
 let moveCounter = 0;
 let matchCounter = 0;
 let firstMove = true;
-let startTime, endTime;
+let timerInterval;
+let minutes, seconds, totalSeconds;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -43,6 +44,7 @@ function createCard(card) {
 // Initialize the game board
 function initializeGame() {
     shuffle(cardDeck);
+    let timer = document.querySelector('#timer');
     const deck = document.createElement('ul')
     for (const card of cardDeck) {
         const newCard = document.createElement('li')
@@ -58,9 +60,11 @@ function initializeGame() {
     matchCounter = 0;
     movesElement.textContent = 0;
     firstMove = true;
-    startTime = 0;
-    endTime = 0;
     starRating = 3;
+    minutes = 0;
+    seconds = 0;
+    totalSeconds = 0;
+    timer.textContent = "00:00";
 }
 
 initializeGame();
@@ -71,23 +75,46 @@ function clearBoard() {
     deck.remove();
 }
 
+// Start game timer
+function startGameTimer(){
+    timerInterval = setInterval(gameTimer, 1000);
+}
+
+// Stop game timer
+function stopGameTimer() {
+    clearInterval(timerInterval);
+}
+
+// Time for game
+function gameTimer() {
+    let timer = document.querySelector('#timer');
+    let minutesString = "";
+    let secondsString = "";
+    ++totalSeconds;
+
+    minutes = parseInt(totalSeconds / 60);
+    seconds = totalSeconds % 60;
+
+    minutesString = minutes + "";
+    if(minutesString.length < 2) {
+        minutesString = "0" + minutesString;
+    }
+
+    secondsString = seconds + "";
+    if(secondsString.length < 2) {
+        secondsString = "0" + secondsString;
+    }
+
+    timer.textContent = minutesString + ":" + secondsString;
+}
 
 // Show the game over modal
 function gameOverModal() {
-    let timeDiff = Math.abs(endTime - startTime) / 1000;
-    let hours = Math.floor(timeDiff / 3600) % 24;
-    let minutes = Math.floor(timeDiff / 60) % 60;
-    let seconds = timeDiff % 60;
+
     let time = document.getElementById("time");
     let rating = document.getElementById("rating");
 
-    if(minutes == 0){
-        time.textContent = "You completed the game in " + seconds.toFixed(0) + " seconds.";
-    } else if (minutes == 1) {
-        time.textContent = "You completed the game in " + minutes + " minute and " + seconds.toFixed(0) + " seconds.";
-    } else {
-        time.textContent = "You completed the game in " + minutes + " minutes and " + seconds.toFixed(0) + " seconds.";
-    }
+    time.textContent = "You completed the game in " + minutes + ":" + seconds;
 
     if (starRating > 1) {
         rating.textContent = "Your star rating is " + starRating + " stars."
@@ -158,12 +185,12 @@ function hideCards() {
       openCards[0].classList.remove('open', 'show');
       openCards[1].classList.remove('open', 'show');
       openCards = [];
-    }, 1500);
+    }, 1200);
 }
 
 // All of the cards have matched - end the game
 function endGame(){
-    endTime = new Date();
+    stopGameTimer();
     gameOverModal();
 }
 
@@ -204,7 +231,7 @@ function clickResponse(event) {
         if(!event.target.classList.contains('match') || !event.target.classList.contains('open')){ // Ignore cards that are already matched or flipped.
             if(firstMove == true) {
                 firstMove = false;
-                startTime = new Date();
+                startGameTimer();
             }
             flipCard();
         }
